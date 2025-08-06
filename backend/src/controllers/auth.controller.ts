@@ -38,8 +38,21 @@ export const loginAdmin = async (req: Request, res: Response) => {
 
     const token = generateToken(admin._id.toString());
 
-    res.json({ token, adminId: admin._id });
+    res.json({ token, adminId: admin._id, message: "Login successful" });
   } catch (err) {
     res.status(500).json({ message: "Login failed", error: err });
+  }
+};
+export const logoutAdmin = async (req: Request, res: Response) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+
+    res.status(200).json({ message: "Logout successful" });
+  } catch (err) {
+    res.status(500).json({ message: "Logout failed", error: err });
   }
 };
